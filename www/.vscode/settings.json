@@ -1,0 +1,6 @@
+{
+	"vetur.format.options.tabSize": 4,
+	"vetur.format.enable": false,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true
+}
