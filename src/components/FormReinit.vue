@@ -34,10 +34,7 @@
 			:class="{ finished: taskFinished }"
 			@click="submit"
 		>
-			<img
-				src="../../../app/assets/icons/check_on.svg"
-				alt="My Happy SVG"
-			/>
+			<img src="@/assets/check_on.svg" />
 		</button>
 		<p class="success-text" :class="{ finished: taskFinished }">
 			{{ successMsg }}
@@ -45,17 +42,19 @@
 	</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
 	props: {
-		token: {},
+		token: {}
 	},
 	data() {
 		console.log(process.env.NODE_ENV);
 
 		return {
-			password: "BRoutRAS12@@",
-			verification: "BRoutRAS12@@",
+			password: "",
+			verification: "",
 			validInput: false,
 			errorMsg: "",
 			helpOpen: false,
@@ -64,7 +63,7 @@ export default {
 			url:
 				process.env.NODE_ENV == "development"
 					? "http://localhost:8080"
-					: "https://dev.lychen.fr",
+					: "https://app.reseau-lichen.fr"
 		};
 	},
 	methods: {
@@ -98,12 +97,12 @@ export default {
 				.put(
 					this.url + "/users/",
 					{
-						password: this.password,
+						password: this.password
 					},
 					{
 						headers: {
-							Authorization: `Bearer ${this.$route.query.token}`,
-						},
+							Authorization: `Bearer ${this.$route.query.token}`
+						}
 					}
 				)
 				.then((res) => {
@@ -119,16 +118,16 @@ export default {
 							"Votre mot de passe n'a pas pu être correctement modifié";
 					}
 				});
-		},
+		}
 	},
 	computed: {
 		icon() {
-			return "../../../app/assets/icons/" + validInput
+			return "../../../app/assets/icons/" + this.validInput
 				? "check_on.svg"
 				: "check_off.svg";
-		},
-	},
-};
+		}
+	}
+});
 </script>
 
 <style lang="sass">

@@ -1,9 +1,6 @@
 <template>
 	<div class="header">
-		<img
-			style="width: 70px; height: 70px"
-			src="https://dev.lychen.fr/logo.png"
-		/>
+		<img style="width: 70px; height: 70px" src="@/assets/logo.png" />
 		<label>Lichen</label>
 	</div>
 </template>
