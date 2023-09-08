@@ -5,7 +5,12 @@ const routes = [
 	{
 		path: "/",
 		name: "Home",
-		component: Home,
+		component: Home
+	},
+	{
+		path: "/admin",
+		name: "AdminPage",
+		component: () => import("../views/AdminPage.vue")
 	},
 	{
 		path: "/reinit-password",
@@ -16,13 +21,13 @@ const routes = [
 		component: () =>
 			import(
 				/* webpackChunkName: "about" */ "../views/ReinitPassword.vue"
-			),
-	},
+			)
+	}
 ];
 
 const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
-	routes,
+	routes
 });
 
 export default router;

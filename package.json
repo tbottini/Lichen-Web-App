@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"start:prod": "yarn build && nohup serve -s dist -l 3001 &",
+		"serve:prod": "serve --single dist -l $PORT",
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint",

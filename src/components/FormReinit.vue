@@ -42,10 +42,10 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script>
+import { Sdk } from "../api/sdk";
 
-export default defineComponent({
+export default {
 	props: {
 		token: {}
 	},
@@ -59,11 +59,7 @@ export default defineComponent({
 			errorMsg: "",
 			helpOpen: false,
 			taskFinished: false,
-			successMsg: "",
-			url:
-				process.env.NODE_ENV == "development"
-					? "http://localhost:8080"
-					: "https://app.reseau-lichen.fr"
+			successMsg: ""
 		};
 	},
 	methods: {
@@ -73,38 +69,24 @@ export default defineComponent({
 				return;
 			}
 
-			console.log("submit tried");
 			if (this.password != this.verification) {
 				this.errorMsg = "Les mots de passe ne correspondent pas";
 				return;
 			}
 
-			var test =
+			const passwordIsValid =
 				/^(?=.*[a-z])(?=.*[A-Z])(?=.*[<>()\-ù&à#§!~&=°|%^£¤$\[\]\\.,`;*:\s@]).{8,}$/.test(
 					this.password
 				);
 
-			if (!test) {
+			if (!passwordIsValid) {
 				this.errorMsg = "Le mot de passe est mal formaté";
 				return;
 			}
 
-			console.log("test");
+			const sdk = new Sdk(this.axios);
 
-			console.log(this.axios);
-
-			this.axios
-				.put(
-					this.url + "/users/",
-					{
-						password: this.password
-					},
-					{
-						headers: {
-							Authorization: `Bearer ${this.$route.query.token}`
-						}
-					}
-				)
+			sdk.reinitPassword(this.password, this.$route.query.token)
 				.then((res) => {
 					console.log(res, res.data);
 
@@ -117,17 +99,13 @@ export default defineComponent({
 						this.errorMsg =
 							"Votre mot de passe n'a pas pu être correctement modifié";
 					}
+				})
+				.catch((e) => {
+					console.log(e.message);
 				});
 		}
-	},
-	computed: {
-		icon() {
-			return "../../../app/assets/icons/" + this.validInput
-				? "check_on.svg"
-				: "check_off.svg";
-		}
 	}
-});
+};
 </script>
 
 <style lang="sass">
