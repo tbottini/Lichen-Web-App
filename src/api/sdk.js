@@ -46,6 +46,15 @@ export class Sdk {
 		);
 
 		console.log(res);
+
+		const newToken = res.data.token;
+		console.log(data);
+		await this.axios.put(
+			this.getBaseUrl() + "/users/self/gallery",
+			data.position,
+			this.getAuthorization(newToken)
+		);
+
 		return res.data;
 	}
 

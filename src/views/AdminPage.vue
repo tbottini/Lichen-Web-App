@@ -1,6 +1,9 @@
 <template>
 	<p class="erreur">{{ erreurstr }}</p>
-	<div>token du lieu : <input v-model="token" type="text" /></div>
+	<div>
+		token du lieu :
+		<input v-model="token" @input="updateToken" type="text" />
+	</div>
 	création de lieu
 	<div>
 		nom du lieu <input v-model="placeForm.pseudo" /><br />
@@ -16,9 +19,15 @@
 	<p>Lieu selectionné : {{ selectedPlace?.pseudo }}</p>
 	<h3>Création d'évènement</h3>
 	<div>
-		nom : <input v-model="eventForm.name" /> <br />date :
-		<input v-model="eventForm.date" type="date" /> <br />description :
-		<input v-model="eventForm.description" /><br />
+		nom : <input v-model="eventForm.name" /> <br />
+
+		date :<input v-model="eventForm.dateStart" type="date" />
+		<br />
+
+		date fin <input v-model="eventForm.dateEnd" type="date" /><br />
+
+		description :<input v-model="eventForm.description" /><br />
+
 		<button @click="createEvent">Créer l'event</button>
 	</div>
 	<h3>events</h3>
@@ -33,8 +42,11 @@ import { Sdk } from "../api/sdk";
 
 export default {
 	data() {
+		// localStorage.token = "test";
+		console.log("token", localStorage);
+
 		return {
-			token: "",
+			token: localStorage.token,
 			placeForm: {
 				pseudo: "",
 				description: "",
@@ -46,7 +58,8 @@ export default {
 			events: [],
 			eventForm: {
 				name: "",
-				date: null,
+				dateStart: null,
+				dateEnd: null,
 				description: ""
 			},
 			erreurstr: ""
@@ -104,6 +117,9 @@ export default {
 
 			console.log("events", this.selectedPlace.id, events);
 		},
+		updateToken(value) {
+			localStorage.token = value.target.value;
+		},
 		async createEvent() {
 			if (!this.token) {
 				console.log("test");
@@ -126,6 +142,7 @@ export default {
 
 				this.eventForm.name = "";
 				this.eventForm.dateStart = null;
+				this.eventForm.dateEnd = null;
 				this.eventForm.description = "";
 
 				await this.refreshEvents();
