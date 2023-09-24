@@ -76,6 +76,69 @@ export class Sdk {
 		return res.data;
 	}
 
+	async deleteEvent(eventId, token) {
+		return this.delete("/events/" + eventId, token);
+	}
+
+	async deleteGallery(galleryId, token) {
+		return this.delete("/users/gallery/" + galleryId, token);
+	}
+
+	async updateGallery(userId, data, token) {
+		if (data.longitude || data.latitude) {
+			const gallery = await this.put(
+				"/users/" + userId + "/gallery/",
+				data,
+				token
+			);
+		}
+
+		if (data.name) {
+			await this.put("/users/" + userId, { pseudo: data.name }, token);
+		}
+	}
+
+	async updateEvent(eventId, data, token) {
+		return this.put("/events/" + eventId, data, token);
+	}
+
+	async post(url, data, token) {
+		const res = await this.axios.post(
+			this.getBaseUrl() + url,
+			data,
+			this.getAuthorization(token)
+		);
+
+		console.log(res);
+		return res.data;
+	}
+
+	async put(url, data, token) {
+		// il faudra peut être du multipart/data ?
+
+		const res = await this.axios.put(
+			this.getBaseUrl() + url,
+			data,
+			this.getAuthorization(token)
+		);
+
+		console.log(res);
+		return res.data;
+	}
+
+	async delete(url, token) {
+		console.log(token);
+
+		const res = await this.axios.delete(
+			this.getBaseUrl() + url,
+
+			this.getAuthorization(token)
+		);
+
+		console.log(res);
+		return res.data;
+	}
+
 	getAuthorization(token) {
 		return {
 			headers: {
