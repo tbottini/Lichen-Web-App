@@ -69,6 +69,11 @@ export class Sdk {
 		return res.data;
 	}
 
+	async getAllEvents() {
+		const res = await this.axios.get(this.getBaseUrl() + "/events");
+		return res.data;
+	}
+
 	async getEvents(galleryId) {
 		const res = await this.axios.get(
 			this.getBaseUrl() + "/events?galleryId=" + galleryId

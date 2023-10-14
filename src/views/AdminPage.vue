@@ -1,154 +1,145 @@
 <template>
-	<h1>Page admin</h1>
-	<div>
-		token admin :
-		<input v-model="token" @input="updateToken" type="text" />
-	</div>
+	<template v-if="page == 'gallery'">
+		<h2>Galerie</h2>
+		<p class="erreur">{{ erreurstr }}</p>
 
-	<h2>Galerie</h2>
-	<p class="erreur">{{ erreurstr }}</p>
-
-	<h3>Création du lieu</h3>
-	<div class="form">
-		<div>
-			<label>nom</label>
-			<input v-model="placeForm.pseudo" />
-		</div>
-		<div>
-			<label>description</label>
-			<input v-model="placeForm.description" />
-		</div>
-
-		<div>
-			<label>longitude</label>
-			<input v-model="placeForm.longitude" />
-		</div>
-
-		<div>
-			<label>latitude</label>
-			<input v-model="placeForm.latitude" />
-		</div>
-
-		<button @click="createPlace">créer le lieu</button>
-	</div>
-
-	<p>Liste de galeries</p>
-	<ul>
-		<li class="row-edit" v-for="place in places" :key="place.id">
-			<div
-				:class="{
-					selected: place.id === selectedPlace?.id,
-					notselected: place.id !== selectedPlace?.id
-				}"
-				@click="selectPlace(place)"
-			>
-				{{ place.pseudo }}, position : ({{ place.gallery.longitude }},
-				{{ place.gallery.latitude }})
+		<h3>Création du lieu</h3>
+		<div class="form">
+			<div>
+				<label>nom</label>
+				<input v-model="placeForm.pseudo" />
 			</div>
-			<div class="button" @click="deleteGallery(place)">Supprimer</div>
-		</li>
-	</ul>
+			<div>
+				<label>description</label>
+				<input v-model="placeForm.description" />
+			</div>
 
-	<p>Galerie selectionnée : {{ selectedPlace?.pseudo }}</p>
-	<div class="form" v-if="selectedPlace != null">
-		<h3>Modification de la galerie</h3>
+			<div>
+				<label>longitude</label>
+				<input v-model="placeForm.longitude" />
+			</div>
 
-		<div>
-			<label>nom</label>
-			<input v-model="updatePlace.name" />
-		</div>
-		<div>
-			<label>longitude</label>
-			<input v-model="updatePlace.longitude" />
-		</div>
-		<div>
-			<label>latitude</label>
-			<input v-model="updatePlace.latitude" />
+			<div>
+				<label>latitude</label>
+				<input v-model="placeForm.latitude" />
+			</div>
+
+			<button @click="createPlace">créer le lieu</button>
 		</div>
 
-		<button @click="updateGallery">mettre à jour</button>
-	</div>
-
-	<h2>Évènement</h2>
-
-	<div class="form" v-if="selectedPlace != null">
-		<h3>Création d'évènement</h3>
-
-		<div>
-			<label>nom</label>
-			<input v-model="eventForm.name" />
-		</div>
-
-		<div>
-			<label>description</label>
-			<input v-model="eventForm.description" />
-		</div>
-		<div>
-			<label>date début</label>
-			<input type="date" v-model="eventForm.dateStart" />
-		</div>
-		<div>
-			<label>date fin</label>
-			<input type="date" v-model="eventForm.dateEnd" />
-		</div>
-
-		<button @click="createEvent">Créer l'event</button>
-	</div>
-	<div class="form" v-if="selectedEvent != null">
-		<h3>Modification de l'évènement</h3>
-
-		<div>
-			<label>nom</label>
-			<input v-model="updateEventPayload.name" />
-		</div>
-		<div>
-			<label>longitude</label>
-			<input type="number" v-model="updateEventPayload.longitude" />
-		</div>
-		<div>
-			<label>latitude</label>
-			<input type="number" v-model="updateEventPayload.latitude" />
-		</div>
-
-		<div>
-			<label>date début</label>
-			<input type="date" v-model="updateEventPayload.dateStart" />
-		</div>
-
-		<div>
-			<label>date fin</label>
-			<input type="date" v-model="updateEventPayload.dateEnd" />
-		</div>
-
-		<div>
-			<label>description</label>
-			<input v-model="updateEventPayload.description" />
-		</div>
-		<button @click="updateEvent()">mettre à jour</button>
-	</div>
-
-	<div v-if="selectedPlace != null">
-		<p>Liste d'évènement de la galerie</p>
+		<p>Liste de galeries</p>
 		<ul>
-			<li class="row-edit" v-for="event in events" :key="event.id">
+			<li class="row-edit" v-for="place in places" :key="place.id">
 				<div
 					:class="{
-						selected: event.id === selectedEvent?.id,
-						notselected: event.id !== selectedEvent?.id
+						selected: place.id === selectedPlace?.id,
+						notselected: place.id !== selectedPlace?.id
 					}"
-					@click="selectEvent(event)"
+					@click="selectPlace(place)"
 				>
-					- {{ event.name }} le {{ formatDate(event.dateStart) }}
-					{{ event.dateEnd ? "au" : "" }}
-					{{ formatDate(event.dateEnd) }}
+					{{ place.pseudo }}, position : ({{
+						place.gallery.longitude
+					}}, {{ place.gallery.latitude }})
 				</div>
-				<div class="button" @click="deleteEvent(event)">Supprimer</div>
+				<div class="button" @click="deleteGallery(place)">
+					Supprimer
+				</div>
 			</li>
 		</ul>
-	</div>
+
+		<p>Galerie selectionnée : {{ selectedPlace?.pseudo }}</p>
+		<div class="form" v-if="selectedPlace != null">
+			<h3>Modification de la galerie</h3>
+
+			<div>
+				<label>nom</label>
+				<input v-model="updatePlace.name" />
+			</div>
+			<div>
+				<label>longitude</label>
+				<input v-model="updatePlace.longitude" />
+			</div>
+			<div>
+				<label>latitude</label>
+				<input v-model="updatePlace.latitude" />
+			</div>
+
+			<button @click="updateGallery">mettre à jour</button>
+		</div>
+
+		<h2>Évènement</h2>
+
+		<div class="form" v-if="selectedPlace != null">
+			<h3>Création d'évènement</h3>
+
+			<div>
+				<label>nom</label>
+				<input v-model="eventForm.name" />
+			</div>
+
+			<div>
+				<label>description</label>
+				<input v-model="eventForm.description" />
+			</div>
+			<div>
+				<label>date début</label>
+				<input type="date" v-model="eventForm.dateStart" />
+			</div>
+			<div>
+				<label>date fin</label>
+				<input type="date" v-model="eventForm.dateEnd" />
+			</div>
+
+			<button @click="createEvent">Créer l'event</button>
+		</div>
+		<div class="form" v-if="selectedEvent != null">
+			<h3>Modification de l'évènement</h3>
+
+			<div>
+				<label>nom</label>
+				<input v-model="updateEventPayload.name" />
+			</div>
+			<div>
+				<label>longitude</label>
+				<input type="number" v-model="updateEventPayload.longitude" />
+			</div>
+			<div>
+				<label>latitude</label>
+				<input type="number" v-model="updateEventPayload.latitude" />
+			</div>
+
+			<div>
+				<label>date début</label>
+				<input type="date" v-model="updateEventPayload.dateStart" />
+			</div>
+
+			<div>
+				<label>date fin</label>
+				<input type="date" v-model="updateEventPayload.dateEnd" />
+			</div>
+
+			<div>
+				<label>description</label>
+				<input v-model="updateEventPayload.description" />
+			</div>
+			<button @click="updateEvent()">mettre à jour</button>
+		</div>
+
+		<div v-if="selectedPlace != null">
+			<p>Liste d'évènement de la galerie</p>
+
+			<EventSlot
+				:events="events"
+				@deletedEvent="(e) => deleteEvent(e)"
+				@selectEvent="(e) => selectEvent(e)"
+			></EventSlot>
+		</div>
+	</template>
 </template>
 <script>
 import { Sdk } from "../api/sdk";
+import EventSlot from "./EventSlot.vue";
+import { store } from "./state";
 
 function removeUndefined(obj) {
 	return Object.fromEntries(
@@ -159,12 +150,11 @@ function removeUndefined(obj) {
 }
 
 export default {
+	components: { EventSlot },
 	data() {
-		// localStorage.token = "test";
-		console.log("token", localStorage);
-
 		return {
-			token: localStorage.token,
+			page: "gallery",
+			store,
 			placeForm: {
 				pseudo: "",
 				description: "",
@@ -223,7 +213,7 @@ export default {
 						Math.random() * 100000
 					)}@reseau-lichen.fr`
 				},
-				this.token
+				this.store.token
 			);
 
 			this.placeForm.description = "";
@@ -237,8 +227,8 @@ export default {
 
 			await this.refreshEvents();
 		},
-		selectEvent(event) {
-			this.selectedEvent = event;
+		selectEvent(e) {
+			this.selectedEvent = e;
 		},
 		async refreshEvents() {
 			const sdk = new Sdk(this.axios);
@@ -248,15 +238,16 @@ export default {
 			console.log("events", this.selectedPlace.id, events);
 		},
 		async deleteEvent(event) {
+			console.log("delete", event);
 			const sdk = new Sdk(this.axios);
-			await sdk.deleteEvent(event.id, this.token);
+			await sdk.deleteEvent(event.id, this.store.token);
 			await this.refreshEvents();
 		},
 		async deleteGallery(gallery) {
 			console.log(gallery);
 
 			const sdk = new Sdk(this.axios);
-			await sdk.deleteGallery(gallery.id, this.token);
+			await sdk.deleteGallery(gallery.id, this.store.token);
 			await this.refreshPlaces();
 		},
 		async updateGallery() {
@@ -266,7 +257,7 @@ export default {
 				removeUndefined({
 					...this.updatePlace
 				}),
-				this.token
+				this.store.token
 			);
 
 			this.updatePlace.name = null;
@@ -294,7 +285,7 @@ export default {
 				removeUndefined({
 					...this.updateEventPayload
 				}),
-				this.token
+				this.store.token
 			);
 			this.updateEventPayload.name = null;
 			this.updateEventPayload.dateStart = null;
@@ -308,7 +299,7 @@ export default {
 			localStorage.token = value.target.value;
 		},
 		async createEvent() {
-			if (!this.token) {
+			if (!this.store.token) {
 				console.log("test");
 				this.errorstr = "il faut définir le token";
 				return;
@@ -322,7 +313,7 @@ export default {
 						...this.eventForm
 					},
 					this.selectedPlace.id,
-					this.token
+					this.store.token
 				);
 
 				this.eventForm.name = "";

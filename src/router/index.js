@@ -10,7 +10,18 @@ const routes = [
 	{
 		path: "/admin",
 		name: "AdminPage",
-		component: () => import("../views/AdminPage.vue")
+		redirect: { path: "/admin/gallery" },
+		component: () => import("../views/AdminPageTest.vue"),
+		children: [
+			{
+				path: "gallery",
+				component: () => import("../views/AdminPage.vue")
+			},
+			{
+				path: "events",
+				component: () => import("../views/AdminEventPage.vue")
+			}
+		]
 	},
 	{
 		path: "/reinit-password",
