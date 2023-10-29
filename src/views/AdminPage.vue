@@ -83,11 +83,21 @@
 			</div>
 			<div>
 				<label>date début</label>
-				<input type="date" v-model="eventForm.dateStart" />
+				<input type="datetime-local" v-model="eventForm.dateStart" />
 			</div>
 			<div>
 				<label>date fin</label>
-				<input type="date" v-model="eventForm.dateEnd" />
+				<input type="datetime-local" v-model="eventForm.dateEnd" />
+			</div>
+
+			<div>
+				<label>longitude</label>
+				<input type="number" v-model="eventForm.longitude" />
+			</div>
+
+			<div>
+				<label>latitude</label>
+				<input type="number" v-model="eventForm.latitude" />
 			</div>
 
 			<button @click="createEvent">Créer l'event</button>
@@ -110,12 +120,18 @@
 
 			<div>
 				<label>date début</label>
-				<input type="date" v-model="updateEventPayload.dateStart" />
+				<input
+					type="datetime-local"
+					v-model="updateEventPayload.dateStart"
+				/>
 			</div>
 
 			<div>
 				<label>date fin</label>
-				<input type="date" v-model="updateEventPayload.dateEnd" />
+				<input
+					type="datetime-local"
+					v-model="updateEventPayload.dateEnd"
+				/>
 			</div>
 
 			<div>
@@ -183,7 +199,9 @@ export default {
 				name: "",
 				dateStart: null,
 				dateEnd: null,
-				description: ""
+				description: "",
+				longitude: null,
+				latitude: null
 			},
 			erreurstr: ""
 		};
@@ -308,7 +326,7 @@ export default {
 			const sdk = new Sdk(this.axios);
 
 			try {
-				const event = await sdk.createEvent(
+				await sdk.createEvent(
 					{
 						...this.eventForm
 					},
@@ -320,6 +338,8 @@ export default {
 				this.eventForm.dateStart = null;
 				this.eventForm.dateEnd = null;
 				this.eventForm.description = "";
+				this.eventForm.longitude = null;
+				this.eventForm.latitude = null;
 
 				await this.refreshEvents();
 			} catch (e) {
