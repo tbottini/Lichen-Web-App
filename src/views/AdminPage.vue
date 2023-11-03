@@ -51,6 +51,12 @@
 		<div class="form" v-if="selectedPlace != null">
 			<h3>Modification de la galerie</h3>
 
+			nom : {{ selectedPlace.pseudo }}<br />
+			longitude : {{ selectedPlace.gallery.longitude }}<br />
+			latitude : {{ selectedPlace.gallery.latitude }}<br />
+			virtuelle : {{ selectedPlace.isVirtual === true ? "vrai" : "faux"
+			}}<br />
+
 			<div>
 				<label>nom</label>
 				<input v-model="updatePlace.name" />
@@ -64,6 +70,10 @@
 				<input v-model="updatePlace.latitude" />
 			</div>
 
+			<div>
+				<label>virtuel</label>
+				<input type="checkbox" v-model="updatePlace.isVirtual" />
+			</div>
 			<button @click="updateGallery">mettre à jour</button>
 		</div>
 
@@ -182,7 +192,8 @@ export default {
 			updatePlace: {
 				name: null,
 				latitude: null,
-				longitude: null
+				longitude: null,
+				isVirtual: null
 			},
 			updateEventPayload: {
 				name: null,
@@ -215,6 +226,12 @@ export default {
 			const galleries = await sdk.getGalleries();
 			console.log(galleries);
 			this.places = galleries;
+
+			if (this.selectedPlace) {
+				this.selectedPlace = galleries.find(
+					(p) => this.selectedPlace.id == p.id
+				);
+			}
 		},
 		async createPlace() {
 			console.log("va creer le lieu");
@@ -270,6 +287,8 @@ export default {
 		},
 		async updateGallery() {
 			const sdk = new Sdk(this.axios);
+			console.log("e", this.updatePlace.isVirtual);
+
 			await sdk.updateGallery(
 				this.selectedPlace.id,
 				removeUndefined({
@@ -281,9 +300,11 @@ export default {
 			this.updatePlace.name = null;
 			this.updatePlace.longitude = null;
 			this.updatePlace.latitude = null;
+			this.updatePlace.isVirtual = null;
 
 			await this.refreshPlaces();
 		},
+
 		formatDate(date) {
 			if (!date) return "";
 			let dateObj = new Date(date);

@@ -98,8 +98,12 @@ export class Sdk {
 			);
 		}
 
-		if (data.name) {
-			await this.put("/users/" + userId, { pseudo: data.name }, token);
+		if (data.name || data.isVirtual != undefined) {
+			await this.put(
+				"/users/" + userId,
+				{ pseudo: data.name, isVirtual: data.isVirtual },
+				token
+			);
 		}
 	}
 
