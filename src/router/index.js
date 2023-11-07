@@ -24,6 +24,11 @@ const routes = [
 		]
 	},
 	{
+		path: "/assistance",
+		name: "AssistPage",
+		component: () => import("../views/AssistPage.vue")
+	},
+	{
 		path: "/reinit-password",
 		name: "ReinitPassword",
 		// route level code-splitting
